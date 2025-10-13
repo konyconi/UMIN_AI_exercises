@@ -7,3 +7,8 @@ https://colab.research.google.com/github/konyconi/UMIN_AI_exercises/blob/main/UM
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](
 https://colab.research.google.com/github/konyconi/UMIN_AI_exercises/blob/main/UMIN_cviceni02_mlp_backprop.ipynb)
+
+# Cvičení 2 — MLP, rozšíření
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](
+https://colab.research.google.com/github/konyconi/UMIN_AI_exercises/blob/main/UMIN_cviceni03_mlp_extended.ipynb)
