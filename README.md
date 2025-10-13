@@ -21,4 +21,4 @@ https://colab.research.google.com/github/konyconi/UMIN_AI_exercises/blob/main/UM
 # Cvičení 05 — MLP v PyTorch, RNN
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](
-https://colab.research.google.com/github/konyconi/UMIN_AI_exercises/blob/main/UMIN_cviceni04_mlp_solvers.ipynb)
+https://colab.research.google.com/github/konyconi/UMIN_AI_exercises/blob/main/UMIN_cviceni05_mlp_pytorch.ipynb)
