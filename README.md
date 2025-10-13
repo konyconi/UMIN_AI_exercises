@@ -13,7 +13,7 @@ https://colab.research.google.com/github/konyconi/UMIN_AI_exercises/blob/main/UM
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](
 https://colab.research.google.com/github/konyconi/UMIN_AI_exercises/blob/main/UMIN_cviceni03_mlp_extended.ipynb)
 
-# Cvičení 04 — MLP, rozšíření
+# Cvičení 04 — Optimalizátory MLP
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](
 https://colab.research.google.com/github/konyconi/UMIN_AI_exercises/blob/main/UMIN_cviceni04_mlp_solvers.ipynb)
