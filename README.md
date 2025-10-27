@@ -22,3 +22,8 @@ https://colab.research.google.com/github/konyconi/UMIN_AI_exercises/blob/main/UM
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](
 https://colab.research.google.com/github/konyconi/UMIN_AI_exercises/blob/main/UMIN_cvicení05_mlp_pytorch.ipynb)
+
+# Cvičení 06 — CNN
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](
+https://colab.research.google.com/github/konyconi/UMIN_AI_exercises/blob/main/UMIN_cviceni06_cnn.ipynb)
