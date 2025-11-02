@@ -27,3 +27,8 @@ https://colab.research.google.com/github/konyconi/UMIN_AI_exercises/blob/main/UM
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](
 https://colab.research.google.com/github/konyconi/UMIN_AI_exercises/blob/main/UMIN_cvicení06_cnn.ipynb)
+
+# Cvičení 07 — AE, VAE, GAN
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](
+https://colab.research.google.com/github/konyconi/UMIN_AI_exercises/blob/main/UMIN_cviceni07_ae_vae_gan.ipynb)
