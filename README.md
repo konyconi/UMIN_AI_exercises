@@ -32,3 +32,20 @@ https://colab.research.google.com/github/konyconi/UMIN_AI_exercises/blob/main/UM
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](
 https://colab.research.google.com/github/konyconi/UMIN_AI_exercises/blob/main/UMIN_cviceni07_ae_vae_gan.ipynb)
+
+# Cvičení 08 — HF, SD1.5
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](
+https://colab.research.google.com/github/konyconi/UMIN_AI_exercises/blob/main/UMIN_cviceni08_HF_SD1.5.ipynb)
+
+------------------------
+
+# AKTI, část 1
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](
+https://colab.research.google.com/github/konyconi/UMIN_AI_exercises/blob/main/AKTI.ipynb)
+
+# AKTI, část 2
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](
+https://colab.research.google.com/github/konyconi/UMIN_AI_exercises/blob/main/AKTI2.ipynb)
