@@ -1,0 +1,201 @@
+# -*- coding: utf-8 -*-
+"""Vygeneruje README.md jen pro ta cviceni, ktera jsou uz zverejnena.
+
+Duvod: na GitHubu nema stat tabulka s trinacti odkazy, z nichz jedenact vede
+na soubory, ktere tam jeste nejsou. Pri zverejneni dalsiho cviceni se zmeni
+jedine cislo.
+
+Pouziti:
+    python readme_gen.py 2          .. README pro cviceni 1 az 2
+    python readme_gen.py 1 2 5      .. README pro vyjmenovana cviceni
+
+Krome README.md zapise jeste zdroje/publikovat.txt -- seznam cest, ktere ma
+upload_cviceni.bat poslat na GitHub. Ten seznam je tedy na jednom miste
+a nemusi se udrzovat zvlast.
+"""
+import io
+import os
+import re
+import sys
+
+REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+GH = 'https://colab.research.google.com/github/konyconi/UMIN_AI_exercises/blob/main'
+BADGE = ('[![Colab](https://colab.research.google.com/assets/'
+         'colab-badge.svg)]')
+
+NAZVY = {
+    1: 'Perceptron, lineární separabilita, baseline',
+    2: 'Dopředné sítě a backpropagation',
+    3: 'Úlohy, reprezentace dat a ztrátové funkce',
+    4: 'Optimalizace učení',
+    5: 'Generalizace a regularizace',
+    6: 'Praktické trénování hlubokých sítí',
+    7: 'Konvoluční neuronové sítě',
+    8: 'Přenos učení a Vision Transformer',
+    9: 'Sekvenční modely a vektory slov',
+    10: 'Transformer',
+    11: 'Jazykové modely a LLM',
+    12: 'Robustnost, nejistota a změna distribuce',
+    13: 'Volitelné trasy a semestrální projekt',
+}
+
+# skupiny pro tabulku naroku; emituji se jen ty, ktere se zverejnenymi
+# cvicenimi prekryvaji
+NAROKY = [
+    (set(range(1, 7)), '`numpy`, `matplotlib`, `scikit-learn`',
+     'žádná (generují se)', 'do 1 minuty'),
+    ({7, 12}, '+ `torch`, `torchvision`',
+     'MNIST (12 MB, stáhne se sám)', '2–4 minuty'),
+    ({8}, '+ `torch`, `torchvision`',
+     'CIFAR-10 (170 MB) a ResNet-18 (45 MB)', '5–8 minut'),
+    ({9, 10, 11, 13}, '`numpy`, `scikit-learn`, `torch`',
+     'žádná', 'do 2 minut'),
+]
+
+
+def slugy():
+    """{cislo: slug} podle souboru, ktere skutecne lezi v notebooks/."""
+    out = {}
+    for jm in os.listdir(os.path.join(REPO, 'notebooks')):
+        m = re.match(r'UMIN_DL_cv(\d\d)_(.+)\.ipynb$', jm)
+        if m:
+            out[int(m.group(1))] = m.group(2)
+    return out
+
+
+def rozsah(cisla):
+    """[1,2] -> '01–02';  [7,12] -> '07, 12';  [1,2,3,5] -> '01–03, 05'."""
+    cisla = sorted(cisla)
+    kusy, i = [], 0
+    while i < len(cisla):
+        j = i
+        while j + 1 < len(cisla) and cisla[j + 1] == cisla[j] + 1:
+            j += 1
+        if j - i >= 1:
+            kusy.append('%02d–%02d' % (cisla[i], cisla[j]))
+        else:
+            kusy.append('%02d' % cisla[i])
+        i = j + 1
+    return ', '.join(kusy)
+
+
+def main(argv):
+    if not argv:
+        print(__doc__)
+        return 2
+    if len(argv) == 1:
+        publik = list(range(1, int(argv[0]) + 1))
+    else:
+        publik = sorted(int(a) for a in argv)
+
+    sl = slugy()
+    chybi = [c for c in publik if c not in sl]
+    if chybi:
+        print('CHYBA: pro cviceni %s neni notebook v notebooks/'
+              % ', '.join(str(c) for c in chybi))
+        return 1
+
+    # --------------------------------------------------------- tabulka
+    radky = []
+    for c in publik:
+        zad = 'notebooks/UMIN_DL_cv%02d_%s.ipynb' % (c, sl[c])
+        res = 'reseni/UMIN_DL_cv%02d_%s_reseni.ipynb' % (c, sl[c])
+        radky.append('| %02d | %s | %s(%s/%s) | [řešení](%s/%s) |'
+                     % (c, NAZVY[c], BADGE, GH, zad, GH, res))
+
+    if max(publik) < 13:
+        pozn = ('\nDalší cvičení se tu budou objevovat průběžně, vždy v týdnu'
+                '\npříslušné přednášky. Zatím jsou hotová cvičení %s'
+                ' z třinácti.\n' % rozsah(publik))
+    else:
+        pozn = ''
+
+    naroky = []
+    for cisla, knih, data, cas in NAROKY:
+        prekryv = cisla & set(publik)
+        if prekryv:
+            naroky.append('| %s | %s | %s | %s |'
+                          % (rozsah(prekryv), knih, data, cas))
+
+    torch_pozn = ''
+    if not (set(publik) & {7, 8, 9, 10, 11, 12, 13}):
+        torch_pozn = ('\n\n`requirements.txt` uvádí i `torch`; ten je potřeba'
+                      '\nteprve od sedmého cvičení.')
+
+    readme = """# Cvičení ke KMI/UMIN — Deep Learning
+
+Notebooky ke svazku II (*Deep Learning*). Číslování odpovídá přednáškám:
+cvičení *N* navazuje na přednášku *N* a na příslušnou kapitolu skript.
+
+Každý notebook obsahuje výklad, spustitelný kód a několik míst označených
+`# TODO`, která jsou na studentech. Vyřešené verze jsou ve složce
+[`reseni/`](reseni) — jsou spustitelné odshora dolů a slouží ke kontrole,
+ne k opisování.
+
+Vše běží v Google Colabu bez nastavování. GPU není potřeba; kde se hodí,
+notebook si ji vezme sám.
+
+| # | Téma | Zadání | Řešení |
+|---|---|---|---|
+%s
+%s
+## Jak s notebooky pracovat
+
+- Otevřete notebook tlačítkem výše a hned dejte **Kopírovat na Disk**
+  (*Copy to Drive*). Bez toho je jen ke čtení a vaše změny se neuloží.
+- Buňky spouštějte postupně shora dolů (**Shift+Enter**).
+- Místa označená `# TODO` jsou zadání. Dokud je nedoplníte, další buňky spadnou
+  na `NotImplementedError` — to je záměr.
+- Řada úloh končí **otázkou k zamyšlení**. Odpověď se nikam neodevzdává, ale
+  stojí za to si ji formulovat.
+
+## Co která cvičení potřebují
+
+| | knihovny | data | přibližný čas na CPU |
+|---|---|---|---|
+%s
+
+V Colabu je všechno předinstalované. Lokálně stačí `pip install -r
+requirements.txt`.%s
+
+## Údržba
+
+Notebooky se generují ze skriptů ve složce [`zdroje/`](zdroje) — zadání
+i řešení z jednoho zdroje, aby se nemohly rozejít. Jak generátor funguje, je
+v [zdroje/README.md](zdroje/README.md). Tenhle soubor se generuje taky,
+skriptem `zdroje/readme_gen.py`, aby tabulka odpovídala tomu, co je
+opravdu zveřejněné — ruční úpravy v něm se při dalším zveřejnění ztratí.
+
+## Rok 2024
+
+Materiály z předchozího běhu předmětu, který měl jiný sylabus, jsou ve složce
+[`2024/`](2024). Nejsou udržované a nenavazují na aktuální přednášky.
+""" % ('\n'.join(radky), pozn, '\n'.join(naroky), torch_pozn)
+
+    cesta = os.path.join(REPO, 'README.md')
+    io.open(cesta, 'w', encoding='utf-8', newline='\r\n').write(readme)
+    print('README.md    zapsan pro cviceni %s' % rozsah(publik))
+
+    # --------------------------------------------- seznam pro upload
+    soubory = ['.gitignore', 'README.md', 'requirements.txt',
+               'zdroje/README.md', 'zdroje/nbbuild.py', 'zdroje/kontrola.py',
+               'zdroje/nbrun.py', 'zdroje/readme_gen.py']
+    for c in publik:
+        soubory += ['notebooks/UMIN_DL_cv%02d_%s.ipynb' % (c, sl[c]),
+                    'reseni/UMIN_DL_cv%02d_%s_reseni.ipynb' % (c, sl[c]),
+                    'zdroje/cv%02d_%s.py' % (c, sl[c])]
+    chybne = [f for f in soubory
+              if not os.path.exists(os.path.join(REPO, f))]
+    if chybne:
+        print('CHYBA: tyto soubory neexistuji: %s' % ', '.join(chybne))
+        return 1
+    # CRLF, at to 'for /f' v cmd precte spolehlive
+    sez = os.path.join(REPO, 'zdroje', 'publikovat.txt')
+    io.open(sez, 'w', encoding='ascii', newline='\r\n').write(
+        '\n'.join(soubory) + '\n')
+    print('publikovat.txt  %d souboru' % len(soubory))
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main(sys.argv[1:]))
