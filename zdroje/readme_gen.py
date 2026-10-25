@@ -39,6 +39,14 @@ NAZVY = {
     13: 'Volitelné trasy a semestrální projekt',
 }
 
+# notebooky k praktickym prednaskam (UMIN_DL_prNNx_*.ipynb); zverejni se
+# vzdy, kdyz lezi v notebooks/, a v tabulce stoji za cvicenim s nizsim cislem
+PRAKTICKE = {
+    '05b': ('První síť od dat po test (praktická přednáška)',
+            '+ `torch`, `torchvision`', 'MNIST (12 MB, stáhne se sám)',
+            'asi 7 minut'),
+}
+
 # skupiny pro tabulku naroku; emituji se jen ty, ktere se zverejnenymi
 # cvicenimi prekryvaji
 NAROKY = [
@@ -60,6 +68,16 @@ def slugy():
         m = re.match(r'UMIN_DL_cv(\d\d)_(.+)\.ipynb$', jm)
         if m:
             out[int(m.group(1))] = m.group(2)
+    return out
+
+
+def prakticke():
+    """{'05b': slug} podle souboru UMIN_DL_prNNx_*.ipynb v notebooks/."""
+    out = {}
+    for jm in os.listdir(os.path.join(REPO, 'notebooks')):
+        m = re.match(r'UMIN_DL_pr(\d\d[a-z])_(.+)\.ipynb$', jm)
+        if m and m.group(1) in PRAKTICKE:
+            out[m.group(1)] = m.group(2)
     return out
 
 
@@ -96,12 +114,16 @@ def main(argv):
         return 1
 
     # --------------------------------------------------------- tabulka
+    pr = prakticke()
+    polozky = [('%02d' % c, NAZVY[c], 'UMIN_DL_cv%02d_%s' % (c, sl[c]))
+               for c in publik]
+    polozky += [(k, PRAKTICKE[k][0], 'UMIN_DL_pr%s_%s' % (k, pr[k])) for k in pr]
     radky = []
-    for c in publik:
-        zad = 'notebooks/UMIN_DL_cv%02d_%s.ipynb' % (c, sl[c])
-        res = 'reseni/UMIN_DL_cv%02d_%s_reseni.ipynb' % (c, sl[c])
-        radky.append('| %02d | %s | %s(%s/%s) | [řešení](%s/%s) |'
-                     % (c, NAZVY[c], BADGE, GH, zad, GH, res))
+    for cis, nazev, base in sorted(polozky):
+        zad = 'notebooks/%s.ipynb' % base
+        res = 'reseni/%s_reseni.ipynb' % base
+        radky.append('| %s | %s | %s(%s/%s) | [řešení](%s/%s) |'
+                     % (cis, nazev, BADGE, GH, zad, GH, res))
 
     if max(publik) < 13:
         pozn = ('\nDalší cvičení se tu budou objevovat průběžně, vždy v týdnu'
@@ -116,9 +138,11 @@ def main(argv):
         if prekryv:
             naroky.append('| %s | %s | %s | %s |'
                           % (rozsah(prekryv), knih, data, cas))
+    for k in sorted(pr):
+        naroky.append('| %s | %s | %s | %s |' % ((k,) + PRAKTICKE[k][1:]))
 
     torch_pozn = ''
-    if not (set(publik) & {7, 8, 9, 10, 11, 12, 13}):
+    if not (set(publik) & {7, 8, 9, 10, 11, 12, 13}) and not pr:
         torch_pozn = ('\n\n`requirements.txt` uvádí i `torch`; ten je potřeba'
                       '\nteprve od sedmého cvičení.')
 
@@ -184,6 +208,10 @@ Materiály z předchozího běhu předmětu, který měl jiný sylabus, jsou ve 
         soubory += ['notebooks/UMIN_DL_cv%02d_%s.ipynb' % (c, sl[c]),
                     'reseni/UMIN_DL_cv%02d_%s_reseni.ipynb' % (c, sl[c]),
                     'zdroje/cv%02d_%s.py' % (c, sl[c])]
+    for k in sorted(pr):
+        soubory += ['notebooks/UMIN_DL_pr%s_%s.ipynb' % (k, pr[k]),
+                    'reseni/UMIN_DL_pr%s_%s_reseni.ipynb' % (k, pr[k]),
+                    'zdroje/pr%s_%s.py' % (k, pr[k])]
     chybne = [f for f in soubory
               if not os.path.exists(os.path.join(REPO, f))]
     if chybne:

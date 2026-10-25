@@ -15,6 +15,7 @@ notebook si ji vezme sám.
 |---|---|---|---|
 | 01 | Perceptron, lineární separabilita, baseline | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/konyconi/UMIN_AI_exercises/blob/main/notebooks/UMIN_DL_cv01_perceptron.ipynb) | [řešení](https://colab.research.google.com/github/konyconi/UMIN_AI_exercises/blob/main/reseni/UMIN_DL_cv01_perceptron_reseni.ipynb) |
 | 02 | Dopředné sítě a backpropagation | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/konyconi/UMIN_AI_exercises/blob/main/notebooks/UMIN_DL_cv02_backprop.ipynb) | [řešení](https://colab.research.google.com/github/konyconi/UMIN_AI_exercises/blob/main/reseni/UMIN_DL_cv02_backprop_reseni.ipynb) |
+| 05b | První síť od dat po test (praktická přednáška) | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/konyconi/UMIN_AI_exercises/blob/main/notebooks/UMIN_DL_pr05b_prvni_sit.ipynb) | [řešení](https://colab.research.google.com/github/konyconi/UMIN_AI_exercises/blob/main/reseni/UMIN_DL_pr05b_prvni_sit_reseni.ipynb) |
 
 Další cvičení se tu budou objevovat průběžně, vždy v týdnu
 příslušné přednášky. Zatím jsou hotová cvičení 01–02 z třinácti.
@@ -34,12 +35,10 @@ příslušné přednášky. Zatím jsou hotová cvičení 01–02 z třinácti.
 | | knihovny | data | přibližný čas na CPU |
 |---|---|---|---|
 | 01–02 | `numpy`, `matplotlib`, `scikit-learn` | žádná (generují se) | do 1 minuty |
+| 05b | + `torch`, `torchvision` | MNIST (12 MB, stáhne se sám) | asi 7 minut |
 
 V Colabu je všechno předinstalované. Lokálně stačí `pip install -r
 requirements.txt`.
-
-`requirements.txt` uvádí i `torch`; ten je potřeba
-teprve od sedmého cvičení.
 
 ## Údržba
 

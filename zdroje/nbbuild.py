@@ -71,14 +71,17 @@ BADGE = ('[![Open In Colab](https://colab.research.google.com/assets/'
          'colab-badge.svg)](%s/%s)')
 
 
-def build(srcfile, cislo, nazev, cells, podnadpis=None):
-    base = 'UMIN_DL_cv%02d_%s' % (cislo, _slug(srcfile))
+def build(srcfile, cislo, nazev, cells, podnadpis=None, predpona='cv',
+          druh='Cvičení'):
+    # cislo je int (cviceni 1..13) nebo retezec ('04b' u prakticke prednasky)
+    cislo = '%02d' % cislo if isinstance(cislo, int) else cislo
+    base = 'UMIN_DL_%s%s_%s' % (predpona, cislo, _slug(srcfile))
     stu_path = 'notebooks/%s.ipynb' % base
     sol_path = 'reseni/%s_reseni.ipynb' % base
 
     for path, resene in ((stu_path, False), (sol_path, True)):
-        head = '# Cvičení %02d — %s%s\n\n%s' % (
-            cislo, nazev,
+        head = '# %s %s — %s%s\n\n%s' % (
+            druh, cislo, nazev,
             '\n\n*Řešení.*' if resene else '',
             BADGE % (GH, path))
         out, n = [_cell('markdown', head, 0)], 0
@@ -102,4 +105,4 @@ def build(srcfile, cislo, nazev, cells, podnadpis=None):
 
 def _slug(srcfile):
     name = os.path.splitext(os.path.basename(srcfile))[0]
-    return re.sub(r'^cv\d+_', '', name)
+    return re.sub(r'^(cv\d+|pr\d+[a-z]?)_', '', name)
