@@ -20,6 +20,13 @@ notebook si ji vezme sám.
 Další cvičení se tu budou objevovat průběžně, vždy v týdnu
 příslušné přednášky. Zatím jsou hotová cvičení 01–02 z třinácti.
 
+## AKTI
+
+| Notebook | Otevřít |
+|---|---|
+| Vícevrstvý perceptron (MLP) na MNIST | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/konyconi/UMIN_AI_exercises/blob/main/akti/AKTI_MLP.ipynb) |
+| Šablona zápočtového úkolu (studie na Fashion-MNIST) | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/konyconi/UMIN_AI_exercises/blob/main/akti/AKTI_zapocet_sablona.ipynb) |
+
 ## Jak s notebooky pracovat
 
 - Otevřete notebook tlačítkem výše a hned dejte **Kopírovat na Disk**

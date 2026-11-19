@@ -47,6 +47,14 @@ PRAKTICKE = {
             'asi 7 minut'),
 }
 
+# notebooky k predmetu AKTI (akti/AKTI_*.ipynb, generuji se ze zdroje/akti_*.py);
+# v README se objevi jen ty, ktere v akti/ opravdu lezi
+AKTI = [
+    ('AKTI_MLP', 'akti_mlp', 'Vícevrstvý perceptron (MLP) na MNIST'),
+    ('AKTI_zapocet_sablona', 'akti_zapocet',
+     'Šablona zápočtového úkolu (studie na Fashion-MNIST)'),
+]
+
 # skupiny pro tabulku naroku; emituji se jen ty, ktere se zverejnenymi
 # cvicenimi prekryvaji
 NAROKY = [
@@ -141,6 +149,17 @@ def main(argv):
     for k in sorted(pr):
         naroky.append('| %s | %s | %s | %s |' % ((k,) + PRAKTICKE[k][1:]))
 
+    akti = [(nb, zdroj, nazev) for nb, zdroj, nazev in AKTI
+            if os.path.exists(os.path.join(REPO, 'akti', nb + '.ipynb'))]
+    if akti:
+        akti_sekce = ('## AKTI\n\n| Notebook | Otevřít |\n|---|---|\n'
+                      + '\n'.join('| %s | %s(%s/akti/%s.ipynb) |'
+                                  % (nazev, BADGE, GH, nb)
+                                  for nb, _, nazev in akti)
+                      + '\n\n')
+    else:
+        akti_sekce = ''
+
     torch_pozn = ''
     if not (set(publik) & {7, 8, 9, 10, 11, 12, 13}) and not pr:
         torch_pozn = ('\n\n`requirements.txt` uvádí i `torch`; ten je potřeba'
@@ -163,7 +182,7 @@ notebook si ji vezme sám.
 |---|---|---|---|
 %s
 %s
-## Jak s notebooky pracovat
+%s## Jak s notebooky pracovat
 
 - Otevřete notebook tlačítkem výše a hned dejte **Kopírovat na Disk**
   (*Copy to Drive*). Bez toho je jen ke čtení a vaše změny se neuloží.
@@ -194,7 +213,7 @@ opravdu zveřejněné — ruční úpravy v něm se při dalším zveřejnění 
 
 Materiály z předchozího běhu předmětu, který měl jiný sylabus, jsou ve složce
 [`2024/`](2024). Nejsou udržované a nenavazují na aktuální přednášky.
-""" % ('\n'.join(radky), pozn, '\n'.join(naroky), torch_pozn)
+""" % ('\n'.join(radky), pozn, akti_sekce, '\n'.join(naroky), torch_pozn)
 
     cesta = os.path.join(REPO, 'README.md')
     io.open(cesta, 'w', encoding='utf-8', newline='\r\n').write(readme)
@@ -212,6 +231,8 @@ Materiály z předchozího běhu předmětu, který měl jiný sylabus, jsou ve 
         soubory += ['notebooks/UMIN_DL_pr%s_%s.ipynb' % (k, pr[k]),
                     'reseni/UMIN_DL_pr%s_%s_reseni.ipynb' % (k, pr[k]),
                     'zdroje/pr%s_%s.py' % (k, pr[k])]
+    for nb, zdroj, _ in akti:
+        soubory += ['akti/%s.ipynb' % nb, 'zdroje/%s.py' % zdroj]
     chybne = [f for f in soubory
               if not os.path.exists(os.path.join(REPO, f))]
     if chybne:
