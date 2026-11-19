@@ -22,6 +22,9 @@ naučila**, **kde chybuje** a **co se stane, když něco změníme**.
 **Předpoklady:** perceptron, vícevrstvý perceptron a hrubá představa
 o backpropagation. PyTorch znát nemusíte; ukážeme si, jak se známé pojmy
 zapisují v něm.
+
+Místa označená **Předpověď** jsou otázky, na které je dobré si odpovědět
+*dřív*, než se buňka spustí. Odpověď je ukrytá pod šipkou.
 """),
 
 # ---------------------------------------------------------------- 1
@@ -399,8 +402,8 @@ kresli(historie)
 md(r"""
 Čárkovaně je trénovací, plnou čarou validační část.
 
-**K diskusi.** Trénovací ztráta klesá s každou epochou, validační se po pár
-epochách zastaví. Rozevírající se nůžky mezi nimi jsou první známka
+**K diskusi.** Trénovací ztráta až na drobné výkyvy klesá, validační se po
+pár epochách zastaví a může i mírně vzrůst. Rozevírající se nůžky mezi nimi jsou první známka
 **přeučení**: síť se začíná učit zvláštnosti trénovacích obrázků, které se
 na nové obrázky nepřenášejí. Kolik epoch byste podle grafu zvolili?
 """),
