@@ -279,8 +279,11 @@ Vyberte **jednu** otázku. Do buňky pod ní napište, co čekáte a proč (2–
 1. **Šířka, nebo hloubka?** Je lepší jedna široká skrytá vrstva, nebo několik
    užších se zhruba stejným počtem parametrů? (Počet ověříte funkcí
    `pocet_parametru`, například `MLP(skryte=(256,))` proti `MLP(skryte=(160, 160, 160))`.)
+   Rozdíly tu bývají malé; i „rozdíl je menší než rozptyl mezi seedy“ je
+   platný výsledek, pokud ho doložíte.
 2. **Velikost dávky.** Jak záleží na `batch_size` (např. 16 / 64 / 512) při
-   stejném počtu epoch?
+   stejném počtu epoch? Měřte i čas trénování (`time.time()` před a po);
+   malé dávky jsou výrazně pomalejší, zapněte si GPU.
 3. **Kolik dat stačí?** Od kolika trénovacích obrázků přesnost na validaci
    přestane znatelně růst? (Podmnožinu předáte jako `X=Xtr[:n], y=ytr[:n]`.)
 4. **Regularizace při malých datech.** Pomůže dropout nebo `weight_decay`, když
