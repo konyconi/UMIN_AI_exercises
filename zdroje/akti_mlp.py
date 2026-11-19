@@ -38,7 +38,7 @@ md(r"""
 | `torch.utils.data` | `DataLoader`: dělení dat na dávky (minibatche) a jejich míchání |
 | `matplotlib` | grafy a obrázky |
 
-Pevné **semínko** (`manual_seed`) zajistí, že při opakovaném spuštění vyjdou
+Pevný **seed** (`manual_seed`) zajistí, že při opakovaném spuštění vyjdou
 stejné počáteční váhy, a tedy i stejná čísla.
 """),
 
