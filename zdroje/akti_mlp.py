@@ -22,22 +22,6 @@ naučila**, **kde chybuje** a **co se stane, když něco změníme**.
 **Předpoklady:** perceptron, vícevrstvý perceptron a hrubá představa
 o backpropagation. PyTorch znát nemusíte; ukážeme si, jak se známé pojmy
 zapisují v něm.
-
-**Plán (90 minut)**
-
-| část | obsah | čas |
-|---|---|---|
-| 1–2 | knihovny, data a jejich příprava | 15 min |
-| 3 | model v PyTorch, softmax, nenaučená síť | 20 min |
-| 4 | backpropagation v PyTorch, trénovací smyčka, křivky učení | 20 min |
-| 5–6 | vyhodnocení, chyby, pohled do vah | 15 min |
-| 7 | experimenty | 20 min |
-
-Celý notebook doběhne na obyčejném CPU za jednu až tři minuty, GPU není
-potřeba.
-
-Místa označená **Předpověď** jsou otázky, na které je dobré si odpovědět
-*dřív*, než se buňka spustí. Odpověď je ukrytá pod šipkou.
 """),
 
 # ---------------------------------------------------------------- 1
@@ -48,7 +32,7 @@ md(r"""
 |---|---|
 | `torch` | tenzory (vícerozměrná pole) a automatický výpočet gradientů |
 | `torch.nn` | stavební bloky sítí: vrstvy, aktivační a ztrátové funkce |
-| `torch.utils.data` | `DataLoader`: dělení dat na dávky a jejich míchání |
+| `torch.utils.data` | `DataLoader`: dělení dat na dávky (minibatche) a jejich míchání |
 | `matplotlib` | grafy a obrázky |
 
 Pevné **semínko** (`manual_seed`) zajistí, že při opakovaném spuštění vyjdou
@@ -127,8 +111,7 @@ nastavení, odhad přesnosti by vyšel příznivěji, než jaký ve skutečnosti
 Pixely převedeme na škálu 0–1 a pak je **standardizujeme**: odečteme průměr
 a vydělíme směrodatnou odchylkou. Vstupy pak mají průměr 0 a rozptyl 1, což
 optimalizaci výrazně usnadní. Průměr a odchylku počítáme **jen z trénovací
-části**. (Stejné dělá `transforms.Normalize((0.1307,), (0.3081,))` v torchvision;
-čísla 0,1307 a 0,3081 jsou právě tyto statistiky pro MNIST.)
+části**.
 """),
 
 code(r"""
@@ -156,7 +139,7 @@ Kanál je jeden, protože obrázky jsou šedotónové (barevné by měly tři).
 
 ### Dávky
 
-`DataLoader` rozdělí data na **dávky** (*batch*) po 64 obrázcích a na začátku
+`DataLoader` rozdělí data na **dávky** (*minibatch*) po 64 obrázcích a na začátku
 každé epochy je zamíchá. Síť po každé dávce jednou upraví váhy, za jednu epochu
 tedy zhruba 860krát.
 """),
@@ -312,7 +295,7 @@ md(r"""
 
 Při dopředném průchodu si PyTorch zaznamenává, jaké operace se s tenzory
 prováděly. Zavolání `loss.backward()` pak projde tento záznam pozpátku
-a řetízkovým pravidlem spočítá derivaci ztráty podle **každého** parametru:
+a spočítá derivaci ztráty podle **každého** parametru:
 přesně backpropagation, jen ji nemusíme psát ručně. Výsledek uloží do
 atributu `.grad`, který má stejný tvar jako parametr sám.
 
